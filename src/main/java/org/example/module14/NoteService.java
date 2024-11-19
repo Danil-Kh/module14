@@ -1,21 +1,16 @@
 package org.example.module14;
 
-import org.example.module14.Exceptions.UnableDeleteNote;
-import org.example.module14.Exceptions.UnableFindNote;
-import org.example.module14.Exceptions.UnableUpdateNote;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.example.module14.exceptions.UnableDeleteNote;
+import org.example.module14.exceptions.UnableFindNote;
+import org.example.module14.exceptions.UnableUpdateNote;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@SpringBootApplication
 @Service
-public class NodeCrudServise {
-    private static Note note;
+public class NoteService {
     private static Map<Long, Note> notes = new HashMap();
     private static Random idGenerator = new Random();
-
 
     public List<Note> listAllNotes() {
         return new ArrayList<>(notes.values());
@@ -24,7 +19,7 @@ public class NodeCrudServise {
         int allNotes = notes.size();
         notes.remove(id);
         if (allNotes == notes.size()){
-            throw new UnableDeleteNote();
+            throw new UnableDeleteNote("Unable to delete note");
         }
     }
     public void updateNote(Note note){
@@ -32,7 +27,7 @@ public class NodeCrudServise {
            notes.put(note.getId(), note);
        }
        else{
-           throw new UnableUpdateNote();
+           throw new UnableUpdateNote("Unable to update note");
        }
     }
     public Note getNoteById(long id){
@@ -40,11 +35,11 @@ public class NodeCrudServise {
            return notes.get(id);
         }
         else{
-            throw new UnableFindNote();
+            throw new UnableFindNote("Unable to find note");
         }
     }
 
-   public Note addNote(Note note) {
+    public Note addNote(Note note) {
         Long id = Math.abs(idGenerator.nextLong());
        while (true) {
            if (notes.containsKey(id)) {
